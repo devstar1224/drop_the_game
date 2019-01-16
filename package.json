@@ -1,0 +1,24 @@
+{
+  "name": "drop_the_game",
+  "version": "1.0.0",
+  "description": "drop_the_game 웹온라인 게임 제작 프로젝트",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devstar1224/drop_the_game.git"
+  },
+  "author": "devstar1224",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/devstar1224/drop_the_game/issues"
+  },
+  "homepage": "https://github.com/devstar1224/drop_the_game#readme",
+  "dependencies": {
+    "express": "4.16.4",
+    "mysql": "^2.16.0",
+    "socket.io": "2.2.0"
+  }
+}
