@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+      .fix_bt_size {
+        width : 6.5cm;
+      }
+      .login_form{
+        position:absolute;
+        left : 50%;
+        top : 50%;
+        width : 6.2cm;
+        height : 1.2cm;
+        /*margin-left 는 가로의 총 길이의 /2 한 값 */
+        margin-left : -6cm;
+        margin-top : -0.6cm;
+      }
+      .index_company {
+        left : 50%;
+        margin-left : -2.3cm;
+        color : #F2F2F2;
+        font-size : 10px;
+        position:absolute;
+        bottom:0;
+        height:30px;
+      }
+      .description{
+        color : #F2F2F2;
+        font-size : 10px;
+        text-align : center;
+      }
+
+      a:link { color: #ECCEF5; text-decoration: none;}
+      a:visited { color: #F2F2F2; text-decoration: none;}
+      a:hover { color: #F2F2F2; text-decoration: underline;}
+
+    </style>
+  </head>
+  <body  style="background-image:url('../img/login_page.jpg');">
+
+  <table class="login_form">
+    <tbody>
+      <tr>
+        <td>
+          <a class="" href="/auth/naver">
+          <img class="fix_bt_size" src="../img/naver_login.png">
+          </a></td>
+        <td>
+          <a class="" href="/auth/kakao">
+          <img class="fix_bt_size" src="../img/kakao_login.png">
+          </a></td>
+      </tr>
+      <tr>
+        <td colspan="2" class="description">로그인을 하시면 <a href="#"><b>개인정보 취급 방침</b></a> 과 카드올라에서 규정하는 <a href="#"><b>운영방침</b></a>에 동의하는것으로 간주됩니다.</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="index_company">
+    <div>
+          <span>Copyright 2019. 카드올라. All rights reserved.</span>
+    </div>
+  </div>
+
+  </body>
+</html>

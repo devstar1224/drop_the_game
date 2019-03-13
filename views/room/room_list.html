@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ko" dir="ltr">
+  <head>
+    <meta name="author" content="devstar1224">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+      @font-face {
+        font-family: room;
+        src: url('../../경기천년제목_Light.ttf');
+      }
+
+      body {
+        font-family: room;
+      }
+
+      .room_status {
+        display : inline-block;
+        min-width : 10px;
+        padding : 3px 7px;
+        font-size : 12px;
+        font-weight : bold;
+        line-height : 1;
+        color : #fff;
+        text-align : center;
+        white-space : nowrap;
+        vertical-align : baseline;
+        background-color : #777;
+        border-radius : 10px;
+      }
+
+      .room{
+        padding : 15px;
+        margin-bottom : 20px;
+        border : 1px solid transparent;
+        border-radius : 30px;
+        margin-left : 20px;
+        width : 5cm;
+        height : 3cm;
+      }
+
+      .room_list{
+        overflow : auto;
+        border : 1px solid;
+        background : #F2F2F2;
+        border-color : #D8D8D8;
+        width: 20.5cm;
+        height : 10cm;
+      }
+
+      .room_active{
+        background-color : #dff0d8;
+        border-color : #d6e9c6;
+      }
+
+      .room_disable{
+        background-color : #f2dede;
+        border-color : #ebccd1;
+      }
+
+      .room_full{
+        background-color : #fcf8e3;
+        border-color : #faebcc;
+      }
+
+      .room_locked{
+        background-color : #bce8f1;
+        border-color : #bce8f1;
+      }
+
+      .room_table{
+        margin-top : 20px;
+      }
+
+      .room_num{
+        float : right;
+        font-size : 60px;
+      }
+
+      .room_name{
+        font-size: 14px;
+        font-weight : bold;
+      }
+
+      .lock_symbol{
+        float: right;
+        font-size: 28px;
+        width: 40px;
+        height: 40px;
+      }
+
+    </style>
+  </head>
+  <body>
+    <button type="button" id="room_refresh">새로고침</button>
+    <div class="room_list">
+      <table class="room_table">
+        <tbody class="room_table_data">
+        </tbody>
+      </table>
+    </div>
+    <div class="info">
+
+    </div>
+    <script>
+      $(() => {
+        const socket = io();
+        $("#room_refresh").click(()=>{socket.emit('room_list')}); //새로고침 버튼 리스너
+
+        socket.emit('room_list'); //방 목록 불러오기
+
+        socket.on('room_list', (obj) => {
+          $('.room_table_data').empty();
+
+          if (!obj.length) {return $('.room_table_data').html(`생성된 방이 없어요..ㅠㅠ`);} //생성된 방이 없을때 뜨는 문구
+
+          let count = 0, row = 0, max_col = 3;
+          for(let i = 0; i < obj.length; i++){
+
+            if (!i) { //첫 실행 초기화
+              $('.room_table_data').append(`<tr id="row_${row}">`);
+            }
+            if (count < max_col) { //칼럼 최대 검사
+              insert_room_list(obj, i, row, count);
+              count++;
+              if (count == max_col) {
+                count = 0;
+                row++;
+                $('.room_table_data').append(`<tr id="row_${row}">`);
+              }
+            }
+          }
+        });
+      });
+
+      async function insert_room_list(obj, i, row, count) {
+
+        switch (await check_room_status(obj, i)) {
+          case 1: //게임 진행중
+            $(`#row_${row}`).append(`<td id="col_${count}"`);
+            $(`#row_${row} > #col_${count}`).append($('<div class="room room_disable">').html(`<span class ="room_name">${obj[i].ROOM_TITLE}</span><br><span class ="room_status">${obj[i].ROOM_CONN}/${obj[i].ROOM_MAX}</span><span class ="room_status">게임중</span><br><div class ="room_num">${obj[i].ROOM_NV}</div>`));
+            break;
+          case 2: // 풀방 + 잠김
+            $(`#row_${row}`).append(`<td id="col_${count}">`);
+            $(`#row_${row} > #col_${count}`).append($('<div class="room room_full">').html(`<span class ="room_name">${obj[i].ROOM_TITLE}</span><img src="./img/lock.png" class="lock_symbol"><br><span class ="room_status">Full</span><br><div class ="room_num">${obj[i].ROOM_NV}</div>`));
+            break;
+          case 3: // 풀방
+            $(`#row_${row}`).append(`<td id="col_${count}">`);
+            $(`#row_${row} > #col_${count}`).append($('<div class="room room_full">').html(`<span class ="room_name">${obj[i].ROOM_TITLE}</span><br><span class ="room_status">Full</span><br><div class ="room_num">${obj[i].ROOM_NV}</div>`));
+            break;
+          case 4: // 잠김
+            $(`#row_${row}`).append(`<td id="col_${count}">`);
+            $(`#row_${row} > #col_${count}`).append($('<div class="room room_locked">').html(`<span class ="room_name">${obj[i].ROOM_TITLE}</span><img src="./img/lock.png" class="lock_symbol"><br><span class ="room_status">${obj[i].ROOM_CONN}/${obj[i].ROOM_MAX}</span><br><div class ="room_num">${obj[i].ROOM_NV}</div>`));
+            break;
+          case 5: // 그냥방
+            $(`#row_${row}`).append(`<td id="col_${count}">`);
+            $(`#row_${row} > #col_${count}`).append($('<div class="room room_active">').html(`<span class ="room_name">${obj[i].ROOM_TITLE}</span><br><span class ="room_status">${obj[i].ROOM_CONN}/${obj[i].ROOM_MAX}</span><br><div class ="room_num">${obj[i].ROOM_NV}</div>`));
+            break;
+        }
+      }
+
+      function check_room_status(obj, i) { //게임 진행중1, 풀방+잠김2, 풀방3, 잠김4, 그냥방5
+        if (obj[i].ROOM_PLAY) {
+            return 1;
+        }else {
+          if (obj[i].ROOM_MAX == obj[i].ROOM_CONN) {
+            if (obj[i].ROOM_PW) {
+                return 2;
+            }else{
+              return 3;
+            }
+          }else if(obj[i].ROOM_PW){
+            return 4;
+          }else{
+            return 5;
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
