@@ -86,6 +86,21 @@ exports.info = (app) => {
     commandFile.run(req, io, connection); //사용자 온라인 자동체크
   });
 
+  app.get('/playing', ensureAuthenticated, function(req, res){
+          let sql = `SELECT ID, NICK FROM ACCOUNT_INFO, FRIENDS_INFO WHERE ACCOUNT_INFO.USER_JOIN = 1 AND ACCOUNT_INFO.ID = FRIENDS_INFO.FRIEND_ID AND FRIENDS_INFO.MY_ID= ?`; //온라인 유저 리스트 sql 수정 해야함.
+          connection.query(sql, req.user.id, function(error, result, fields) {
+          if (error) {
+            console.log(error);
+          }else {
+            res.render('/userlist', { //html 기본 view 에서의 디렉토리
+               on_users: result // on_users의 이름으로 객체전송
+          }
+        }
+      });
+    commandFile = require('./session/beat_chk.js');
+    commandFile.run(req, io, connection); //사용자 온라인 자동체크
+  });
+
   app.get('/logout', ensureAuthenticated, function(req, res){
     set_logout(req);
     req.logout();
