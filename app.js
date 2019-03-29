@@ -87,7 +87,7 @@ exports.info = (app) => {
   });
 
   app.get('/playing', ensureAuthenticated, function(req, res){
-          let sql = `SELECT ID, NICK FROM ACCOUNT_INFO, FRIENDS_INFO WHERE ACCOUNT_INFO.USER_JOIN = 1 AND ACCOUNT_INFO.ID = FRIENDS_INFO.FRIEND_ID AND FRIENDS_INFO.MY_ID= ?`; //온라인 유저 리스트 sql 수정 해야함.
+          let sql = `SELECT A.ID, B.LV, A.USER_JOIN AS WIN, A.NICK FROM ACCOUNT_INFO A, ID_INFO B WHERE A.ID=B.ID AND A.USER_JOIN = 1`; //온라인 유저 리스트 sql 수정 해야함.
           connection.query(sql, req.user.id, function(error, result, fields) {
           if (error) {
             console.log(error);
