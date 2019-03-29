@@ -94,7 +94,7 @@ exports.info = (app) => {
           }else {
             res.render('/userlist', { //html 기본 view 에서의 디렉토리
                on_users: result // on_users의 이름으로 객체전송
-          }
+          });
         }
       });
     commandFile = require('./session/beat_chk.js');
