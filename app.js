@@ -31,7 +31,6 @@ app.get('/playing', function (req, res) {
     if (error) {
       console.log(error);
     }else {
-      console.log(result);
       res.render('userlist', { //html 기본 view 에서의 디렉토리
         on_users: result // on_users의 이름으로 객체전송
     });
