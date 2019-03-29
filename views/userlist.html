@@ -24,15 +24,10 @@
     <div class="on_users"><br>
   <table>
     <tbody>
-        <% for(var i=0; i<length; i++){ %>
+        <% for(var i=0; i<on_users.length; i++){ %>
           <tr>
-
-          
-          <td id= <%= on_users[i].ID %> <%= on_users[i].LV %>
-             <%= on_users[i].NICK %> <%= on_users[i].WIN %></td>
-
-
-
+          <td id= <%= on_users[i].ID %>>
+            lv : <%= on_users[i].LV %> nick : <%= on_users[i].NICK %> win: <%= on_users[i].WIN %></td>
            </tr>
           <% } %>
     </tbody>

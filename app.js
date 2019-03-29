@@ -24,6 +24,21 @@ app.get('/login', function(req, res) {
   res.sendFile(__dirname + '/views/login.html');
 });
 
+app.get('/playing', function (req, res) {
+  // WARNING: ※주위!! 보안정보 취급!! 출력값은 필요한것만! 신중하게 생각!
+  let sql = `SELECT A.ID, B.LV, A.USER_JOIN AS WIN, A.NICK FROM ACCOUNT_INFO A, ID_INFO B WHERE A.ID=B.ID AND A.USER_JOIN = 1`; //온라인 유저 리스트 sql 수정 해야함.
+  connection.query(sql, function(error, result, fields) {
+    if (error) {
+      console.log(error);
+    }else {
+      console.log(result);
+      res.render('userlist', { //html 기본 view 에서의 디렉토리
+        on_users: result // on_users의 이름으로 객체전송
+    });
+    }
+  });
+});
+
 let commandFile = require('./resource.js');
 commandFile.run(app);
 
@@ -79,21 +94,6 @@ exports.info = (app) => {
                    info: result, length: `${friends_len}`, friends : friends_list_result
                  });
               }
-          });
-        }
-      });
-    commandFile = require('./session/beat_chk.js');
-    commandFile.run(req, io, connection); //사용자 온라인 자동체크
-  });
-
-  app.get('/playing', ensureAuthenticated, function(req, res){
-          let sql = `SELECT A.ID, B.LV, A.USER_JOIN AS WIN, A.NICK FROM ACCOUNT_INFO A, ID_INFO B WHERE A.ID=B.ID AND A.USER_JOIN = 1`; //온라인 유저 리스트 sql 수정 해야함.
-          connection.query(sql, req.user.id, function(error, result, fields) {
-          if (error) {
-            console.log(error);
-          }else {
-            res.render('/userlist', { //html 기본 view 에서의 디렉토리
-               on_users: result // on_users의 이름으로 객체전송
           });
         }
       });
