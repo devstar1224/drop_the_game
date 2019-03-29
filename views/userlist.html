@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="author" content="ricky1303">
+    <title></title>
+    <style>
+      div {
+        width: 300px;
+        height: 400px;
+        margin: 8px;
+        background-color: pink;
+        color: skyblue;
+        text-align: center;
+        font-weight: 900;
+        font-style: Sans-Serif;
+        font-size: 18px;
+      }
+      .on_users { overflow: scroll; }
+      .box2 { overflow: auto; }
+
+    </style>
+  </head>
+  <body>
+    <div class="on_users"><br>
+  <table>
+    <tbody>
+        <% for(var i=0; i<length; i++){ %>
+          <tr>
+
+          
+          <td id= <%= on_users[i].ID %> <%= on_users[i].LV %>
+             <%= on_users[i].NICK %> <%= on_users[i].WIN %></td>
+
+
+
+           </tr>
+          <% } %>
+    </tbody>
+  </table>
+    </div>
+  </body>
+</html>
