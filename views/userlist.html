@@ -2,6 +2,8 @@
 <html>
   <head>
     <meta name="author" content="ricky1303">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <title></title>
     <style>
       div {
@@ -23,15 +25,22 @@
   <body>
     <div class="on_users"><br>
   <table>
-    <tbody>
-        <% for(var i=0; i<on_users.length; i++){ %>
-          <tr>
-          <td id= <%= on_users[i].ID %>>
-            lv : <%= on_users[i].LV %> nick : <%= on_users[i].NICK %> win: <%= on_users[i].WIN %></td>
-           </tr>
-          <% } %>
+    <tbody class="user_list">
     </tbody>
   </table>
     </div>
   </body>
+  <script>
+        $(() => {
+        const socket = io();
+        socket.emit('all_user_list'); //목록 불러오기
+
+        socket.on('all_user_list', (obj) => {
+          $('.user_list').empty();
+          for(let i = 0; i < obj.length; i++){
+            $('.user_list').append(`<tr><td id="${obj[i].ID}">LV : ${obj[i].LV} nick : ${obj[i].NICK} win : ${obj[i].WIN}</td></tr>`);
+          }
+        });
+      });
+      </script>
 </html>
